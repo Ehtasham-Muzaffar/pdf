@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <object data="Asia_2.pdf#toolbar=0&navpanes=0&scrollbar=0" style="width:100vw;height: 100vh;" type="application/pdf"></object>
+    <a href="Asia_2.pdf" target="_blank">click me</a>
+<script id="script">
+         var yourpagenumberstart = 1;
+         var scaleunitdata = 0.5; 
+         var PdfFilerd; 
+         var url = 'A.pdf'
+
+         function renderPage(page) {
+            var scale = scaleunitdata; // render with global scaleunitdata variable
+            var viewport = page.getViewport(scale);
+            var canvas = document.getElementById('canvas-initalize');
+            var context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            var renderContext = {
+               canvasContext: context,
+               viewport: viewport
+            };
+            page.render(renderContext);
+         }
+
+         function condatarange(pdf, num) {
+            pdf.getPage(num).then(function getPage(page) { renderPage(page); });
+         }
+
+         var pdfDoc = PDFJS.getDocument(url).then(function getPdfHelloWorld(pdf) {
+            condatarange(pdf, 1);
+            PdfFilerd = pdf;
+         });
+
+         var nextbutton = document.getElementById("nextbutton");
+         nextbutton.onclick = function() {
+            if (yourpagenumberstart >= PdfFilerd.numPages) {
+               return;
+            }
+            yourpagenumberstart++;
+            condatarange(PdfFilerd, yourpagenumberstart);
+         }
+
+         var prevbutton = document.getElementById("prevbutton");
+         prevbutton.onclick = function() {
+            if (yourpagenumberstart <= 1) {
+               return;
+            }
+            yourpagenumberstart--;
+            condatarange(PdfFilerd, yourpagenumberstart);
+         }
+
+         var ButtonZoommindata = document.getElementById("ButtonZoommindata");
+         ButtonZoommindata.onclick = function() {
+            scaleunitdata = scaleunitdata + 0.25;
+            condatarange(PdfFilerd, yourpagenumberstart);
+         }
+
+         var ButtonZoomdata = document.getElementById("ButtonZoomdata");
+         ButtonZoomdata.onclick = function() {
+            if (scaleunitdata <= 0.25) {
+               return;
+            }
+            scaleunitdata = scaleunitdata - 0.25;
+            condatarange(PdfFilerd, yourpagenumberstart);
+         }
+      </script>    
+        
+</body>
+</html>
+
+
